@@ -11,6 +11,6 @@ echo "1.0" > debian/source/format
 rm debian/*.ex
 debuild -us -uc
 cd ..
+mv ramnotifier_1-1_amd64.deb ramnotifier_v1.deb
 rm ramnotifier-1 -R
 rm ramnotifier_1* -R
-mv ramnotifier-1-1_amd64.deb ramnotifier_v1.deb
