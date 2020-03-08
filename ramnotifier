@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+MEMORY_LIMIT=1000
+
+OUTPUT=$(free -m)
+OUTPUT=${OUTPUT%%Swap*} # Split at swap.
+OUTPUT=${OUTPUT:: -1} # Strip carriage return from end of string.
+MEMORY=${OUTPUT: -4} # Strip everything but the last four characters.
+
+while :
+do
+
+	if [ $MEMORY_LIMIT \> $MEMORY ]
+		then
+			notify-send RAM "Oh noes! We've only got $MEMORY MB of RAM left!"
+	fi
+
+	sleep 60
+done
