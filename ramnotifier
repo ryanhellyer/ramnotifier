@@ -2,15 +2,13 @@
 
 MEMORY_LIMIT=1000
 
-OUTPUT=$(free -m)
-OUTPUT=${OUTPUT%%Swap*} # Split at swap.
-OUTPUT=${OUTPUT:: -1} # Strip carriage return from end of string.
-MEMORY=${OUTPUT: -4} # Strip everything but the last four characters.
-
-echo $MEMORY
-
 while :
 do
+
+	OUTPUT=$(free -m)
+	OUTPUT=${OUTPUT%%Swap*} # Split at swap.
+	OUTPUT=${OUTPUT:: -1} # Strip carriage return from end of string.
+	MEMORY=${OUTPUT: -4} # Strip everything but the last four characters.
 
 	if [ $MEMORY_LIMIT -gt $MEMORY ]
 		then
