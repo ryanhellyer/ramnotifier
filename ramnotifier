@@ -7,10 +7,12 @@ OUTPUT=${OUTPUT%%Swap*} # Split at swap.
 OUTPUT=${OUTPUT:: -1} # Strip carriage return from end of string.
 MEMORY=${OUTPUT: -4} # Strip everything but the last four characters.
 
+echo $MEMORY
+
 while :
 do
 
-	if [ $MEMORY_LIMIT \> $MEMORY ]
+	if [ $MEMORY_LIMIT -gt $MEMORY ]
 		then
 			notify-send RAM "Oh noes! We've only got $MEMORY MB of RAM left!"
 	fi
