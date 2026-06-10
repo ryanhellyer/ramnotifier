@@ -15,6 +15,8 @@ import (
 )
 
 var lastAlertedThreshold int = 0
+var dbusConn *dbus.Conn
+var lastNotifID uint32 = 0
 
 func configDir() string {
 	if xdg := os.Getenv("XDG_CONFIG_HOME"); xdg != "" {
@@ -61,22 +63,36 @@ func getAvailableMemMB() (int, error) {
 			}
 		}
 	}
+	if err := scanner.Err(); err != nil {
+		return 0, err
+	}
 	return 0, fmt.Errorf("MemAvailable not found")
 }
 
 func sendNotification(title, body string) {
-	conn, err := dbus.SessionBus()
-	if err != nil {
-		fmt.Println("D-Bus connection error:", err)
+	if dbusConn == nil {
 		return
 	}
-	obj := conn.Object("org.freedesktop.Notifications", "/org/freedesktop/Notifications")
-	obj.Call("org.freedesktop.Notifications.Notify", 0,
-		"RAM-Notifier", uint32(0), "", title, body, []string{}, map[string]dbus.Variant{}, int32(-1),
+	obj := dbusConn.Object("org.freedesktop.Notifications", "/org/freedesktop/Notifications")
+	call := obj.Call("org.freedesktop.Notifications.Notify", 0,
+		"RAM-Notifier", lastNotifID, "", title, body, []string{}, map[string]dbus.Variant{}, int32(-1),
 	)
+	if call.Err != nil {
+		fmt.Println("Notification error:", call.Err)
+		return
+	}
+	call.Store(&lastNotifID)
 }
 
 func main() {
+	var err error
+	dbusConn, err = dbus.SessionBus()
+	if err != nil {
+		fmt.Println("D-Bus connection error:", err)
+	} else {
+		defer dbusConn.Close()
+	}
+
 	topThreshold := readTopThreshold()
 
 	sigCh := make(chan os.Signal, 1)
@@ -94,6 +110,7 @@ func main() {
 			if newVal != topThreshold {
 				topThreshold = newVal
 				lastAlertedThreshold = 0
+				lastNotifID = 0
 				fmt.Printf("Config reloaded (alert threshold: %d MB)\n", topThreshold)
 			}
 
@@ -106,6 +123,7 @@ func main() {
 
 			if availableMB <= 0 {
 				sendNotification("System Critical", "Available RAM hit 0 MB. Goodbye!")
+				time.Sleep(100 * time.Millisecond)
 				os.Exit(1)
 			}
 
@@ -115,18 +133,12 @@ func main() {
 				step = 1
 			}
 
-			var currentThreshold int = 0
-			switch {
-			case availableMB <= step:
-				currentThreshold = step
-			case availableMB <= step*2:
-				currentThreshold = step * 2
-			case availableMB <= step*3:
-				currentThreshold = step * 3
-			case availableMB <= step*4:
-				currentThreshold = step * 4
-			case availableMB <= top:
-				currentThreshold = top
+			var currentThreshold int
+			for t := step; t <= top; t += step {
+				if availableMB <= t {
+					currentThreshold = t
+					break
+				}
 			}
 
 			if currentThreshold > 0 {
