@@ -25,7 +25,7 @@ install: build
 	mkdir -p $(ICONDIR)
 	cp ram-monitor.png $(ICONDIR)/ram-monitor.png
 	mkdir -p $(CONFIGDIR)
-	[ -f $(CONFIGDIR)/threshold ] || echo 1500 > $(CONFIGDIR)/threshold
+	[ -f $(CONFIGDIR)/threshold ] || echo 500 > $(CONFIGDIR)/threshold
 	mkdir -p $(SERVICEDIR)
 	sed 's|ExecStart=.*|ExecStart=$(BINDIR)/ram-monitor|' ram-monitor.service > $(SERVICEDIR)/ram-monitor.service
 	systemctl --user daemon-reload

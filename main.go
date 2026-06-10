@@ -41,11 +41,11 @@ func configFilePath() string {
 func readTopThreshold() int {
 	data, err := os.ReadFile(configFilePath())
 	if err != nil {
-		return 1500
+		return 500
 	}
 	val, err := strconv.Atoi(strings.TrimSpace(string(data)))
 	if err != nil || val <= 0 {
-		return 1500
+		return 500
 	}
 	return val
 }

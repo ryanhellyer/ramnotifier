@@ -6,7 +6,7 @@ mkdir -p "$(dirname "${CONFIG_FILE}")"
 
 TOTAL_RAM=$(awk '/MemTotal:/ {printf "%d", $2/1024}' /proc/meminfo)
 
-CURRENT=1500
+CURRENT=500
 if [[ -f "${CONFIG_FILE}" ]]; then
 	CURRENT=$(cat "${CONFIG_FILE}")
 fi

@@ -82,7 +82,7 @@ curl -sSLf "${ICON_URL}" -o "${ICONDIR}/ram-monitor.png" 2>/dev/null || true
 # default config file
 mkdir -p "$(dirname "${CONFIG_FILE}")"
 if [[ ! -f "${CONFIG_FILE}" ]]; then
-    echo "1500" > "${CONFIG_FILE}"
+    echo "500" > "${CONFIG_FILE}"
 fi
 
 # install systemd user service
