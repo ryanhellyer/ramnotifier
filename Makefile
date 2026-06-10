@@ -21,6 +21,7 @@ install: build
 	cp ram-monitor $(BINDIR)/ramnotifier
 	cp ram-monitor-settings.sh $(BINDIR)/ramnotifier-settings
 	chmod +x $(BINDIR)/ramnotifier-settings
+	ln -sf /usr/bin/zenity $(BINDIR)/ramnotifier-zenity
 	mkdir -p $(APPDIR)
 	sed 's|__BINDIR__|$(BINDIR)|g' ram-monitor-settings.desktop > $(APPDIR)/ramnotifier-settings.desktop
 	mkdir -p $(ICONDIR)
@@ -38,6 +39,7 @@ uninstall:
 	systemctl --user disable --now ram-monitor 2>/dev/null || true
 	rm -f $(BINDIR)/ramnotifier
 	rm -f $(BINDIR)/ramnotifier-settings
+	rm -f $(BINDIR)/ramnotifier-zenity
 	rm -f $(APPDIR)/ramnotifier-settings.desktop
 	rm -f $(ICONDIR)/ramnotifier.png
 	rm -f $(SERVICEDIR)/ramnotifier.service

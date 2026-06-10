@@ -22,6 +22,7 @@ if [[ "${1:-}" == "--uninstall" ]]; then
     systemctl --user disable --now "${SERVICE_NAME}" 2>/dev/null || true
     rm -f "${BINDIR}/ramnotifier"
     rm -f "${BINDIR}/ramnotifier-settings"
+    rm -f "${BINDIR}/ramnotifier-zenity"
     rm -f "${APPDIR}/ramnotifier-settings.desktop"
     rm -f "${ICONDIR}/ramnotifier.png"
     rm -f "${SERVICEDIR}/${SERVICE_NAME}.service"
@@ -79,6 +80,9 @@ chmod +x "${BINDIR}/ramnotifier"
 echo "  Downloading settings script"
 curl -sSLf "${SETTINGS_URL}" -o "${BINDIR}/ramnotifier-settings" || true
 chmod +x "${BINDIR}/ramnotifier-settings" 2>/dev/null || true
+
+# symlink so GTK uses our WM_CLASS instead of "zenity"
+ln -sf /usr/bin/zenity "${BINDIR}/ramnotifier-zenity" 2>/dev/null || true
 
 # install desktop entry
 echo "  Installing desktop entry"
