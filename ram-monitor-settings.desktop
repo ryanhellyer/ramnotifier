@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=RAM Monitor Settings
+Comment=Configure the RAM alert threshold
+Exec=__BINDIR__/ram-monitor-settings
+Icon=utilities-system-monitor
+Terminal=false
+Categories=Settings;System;

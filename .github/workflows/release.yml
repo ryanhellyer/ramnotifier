@@ -29,4 +29,6 @@ jobs:
           files: |
             ram-monitor-linux-amd64
             ram-monitor-linux-arm64
+            ram-monitor-settings.sh
+            ram-monitor-settings.desktop
           generate_release_notes: true

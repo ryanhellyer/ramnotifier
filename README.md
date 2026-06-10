@@ -16,20 +16,43 @@ To pin a specific version:
 curl -sSL https://raw.githubusercontent.com/you/ram-monitor/main/install.sh | bash -s v1.0.0
 ```
 
+### What gets installed
+
+| Path | Purpose |
+|------|---------|
+| `~/.local/bin/ram-monitor` | Go binary (background service) |
+| `~/.local/bin/ram-monitor-settings` | Settings UI script |
+| `~/.local/share/applications/ram-monitor-settings.desktop` | Desktop entry (appears in system menu as "RAM Monitor Settings") |
+| `~/.config/systemd/user/ram-monitor.service` | systemd user unit (auto-starts on login) |
+| `~/.config/ram-monitor/threshold` | Config file: top alert threshold in MB (default 1500) |
+
+## Configure
+
+**Via GUI:** launch "RAM Monitor Settings" from your system menu. Opens a slider dialog — no terminal needed. Changes take effect immediately.
+
+**Or manually:** edit the config file, then reload the service.
+
+```bash
+echo 2000 > ~/.config/ram-monitor/threshold
+systemctl --user reload-or-restart ram-monitor
+```
+
+The five alert tiers auto-scale from your top threshold. For example, at 1500 MB the tiers are 1500 / 1200 / 900 / 600 / 300. At 2000 MB they become 2000 / 1600 / 1200 / 800 / 400.
+
 ## How it works
 
 Polls `/proc/meminfo` every 5 seconds. Sends a desktop notification each time available RAM crosses into a worse (lower) threshold tier:
 
 | Threshold | Alert |
 |-----------|-------|
-| 1500 MB   | Low Memory Alert |
-| 1200 MB   | Low Memory Alert |
-| 900 MB    | Low Memory Alert |
-| 600 MB    | Low Memory Alert |
-| 300 MB    | Low Memory Alert |
+| Top tier   | Low Memory Alert |
+| Top × 80%  | Low Memory Alert |
+| Top × 60%  | Low Memory Alert |
+| Top × 40%  | Low Memory Alert |
+| Top × 20%  | Low Memory Alert |
 | 0 MB      | System Critical (exits) |
 
-Alerts only fire once per threshold tier and reset when RAM recovers above 1500 MB.
+Alerts only fire once per threshold tier and reset when RAM recovers above the configured threshold.
 
 ## Manage
 
@@ -50,8 +73,10 @@ Or manually:
 
 ```bash
 systemctl --user disable --now ram-monitor
-rm ~/.local/bin/ram-monitor
+rm ~/.local/bin/ram-monitor ~/.local/bin/ram-monitor-settings
+rm ~/.local/share/applications/ram-monitor-settings.desktop
 rm ~/.config/systemd/user/ram-monitor.service
+rm ~/.config/ram-monitor/threshold
 systemctl --user daemon-reload
 ```
 
@@ -66,6 +91,14 @@ make install
 ```
 
 ## Changelog
+
+### v2.1.0
+
+- Settings UI via desktop entry (system menu → "RAM Monitor Settings").
+- Configurable top threshold stored at `~/.config/ram-monitor/threshold`.
+- Five alert tiers auto-scale from the configured top threshold.
+- SIGHUP reload — changing the config file takes effect immediately without restart.
+- Multiple dialog fallbacks: zenity (GNOME/XFCE) → kdialog (KDE) → terminal.
 
 ### v2.0.0
 
