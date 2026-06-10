@@ -5,4 +5,6 @@ Comment=Configure the RAM alert threshold
 Exec=__BINDIR__/ram-monitor-settings
 Icon=ram-monitor
 Terminal=false
+StartupWMClass=ram-notifier-settings
+StartupNotify=true
 Categories=Settings;System;

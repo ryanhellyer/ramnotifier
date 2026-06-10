@@ -18,7 +18,7 @@ PROMPT="Available RAM below this value (in MB) will trigger a notification"
 # default on GNOME (Ubuntu default), XFCE, Cinnamon, MATE, and Budgie,
 # covering the vast majority of desktop Linux users with no extra dependencies.
 if command -v zenity &>/dev/null; then
-	NEW=$(zenity --scale --title="${TITLE}" \
+	NEW=$(exec -a ram-notifier-settings zenity --scale --title="${TITLE}" \
 		--text="${PROMPT}" \
 		--min-value=100 --max-value="${TOTAL_RAM}" --step=100 \
 		--value="${CURRENT}" 2>/dev/null) || exit 0
