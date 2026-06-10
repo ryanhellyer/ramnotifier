@@ -7,7 +7,7 @@ Requires a systemd-based Linux desktop with a D-Bus notification daemon (Ubuntu,
 ## Install
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/ryanhellyer/ramnotifier/main/install.sh | bash
+curl -sSL https://raw.githubusercontent.com/ryanhellyer/ramnotifier/master/install.sh | bash
 ```
 
 Downloads the binary to `~/.local/bin`, starts a background systemd user service, and auto-starts on login. No terminal window needed.
@@ -23,7 +23,7 @@ Polls `/proc/meminfo` every 5 seconds. Fires a desktop notification only when av
 ## Uninstall
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/ryanhellyer/ramnotifier/main/install.sh | bash -s -- --uninstall
+curl -sSL https://raw.githubusercontent.com/ryanhellyer/ramnotifier/master/install.sh | bash -s -- --uninstall
 ```
 
 ## Build from source
