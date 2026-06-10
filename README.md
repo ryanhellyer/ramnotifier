@@ -38,7 +38,14 @@ make install
 
 ## Changelog
 
-### v2
+### v2.0.1
+
+- Fixed settings UI not writing config when launched from `.desktop` on Wayland.
+- Fixed dock/taskbar showing "zenity" instead of "RAM Notifier" icon and name.
+- Replaced `systemctl reload-or-restart` with `SIGHUP` for reliable config reload from desktop context.
+- Migrated config path from `~/.config/ram-monitor` to `~/.config/ramnotifier`.
+
+### v2.0
 
 - Rewritten in Go. No external dependencies beyond a Linux desktop with D-Bus.
 - Runs as a background systemd user service — no terminal window needed.
@@ -51,7 +58,7 @@ make install
 - One-line install script with `--uninstall` support.
 - Fixed annoying bugs causing non-stop notifications in some situations
 
-### v1
+### v1.0
 
 - Bash script packaged as a `.deb` for Ubuntu.
 - Single-threshold alert when RAM dropped below 1000 MB.
