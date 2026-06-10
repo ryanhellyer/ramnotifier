@@ -2,8 +2,8 @@
 set -euo pipefail
 
 # ---- config: change these to match your repo ----
-OWNER="${GITHUB_OWNER:-you}"
-REPO="${GITHUB_REPO:-ram-monitor}"
+OWNER="${GITHUB_OWNER:-ryanhellyer}"
+REPO="${GITHUB_REPO:-ramnotifier}"
 # -------------------------------------------------
 
 BINDIR="${HOME}/.local/bin"
