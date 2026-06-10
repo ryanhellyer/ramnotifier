@@ -4,6 +4,8 @@ set -euo pipefail
 CONFIG_FILE="${HOME}/.config/ram-monitor/threshold"
 mkdir -p "$(dirname "${CONFIG_FILE}")"
 
+TOTAL_RAM=$(awk '/MemTotal:/ {printf "%d", $2/1024}' /proc/meminfo)
+
 CURRENT=1500
 if [[ -f "${CONFIG_FILE}" ]]; then
 	CURRENT=$(cat "${CONFIG_FILE}")
@@ -18,13 +20,13 @@ PROMPT="Available RAM below this value (in MB) will trigger a notification"
 if command -v zenity &>/dev/null; then
 	NEW=$(zenity --scale --title="${TITLE}" \
 		--text="${PROMPT}" \
-		--min-value=100 --max-value=16000 --step=100 \
+		--min-value=100 --max-value="${TOTAL_RAM}" --step=100 \
 		--value="${CURRENT}" 2>/dev/null) || exit 0
 
 # kdialog is used on KDE Plasma, which bundles it out of the box.
 elif command -v kdialog &>/dev/null; then
 	NEW=$(kdialog --title "${TITLE}" \
-		--slider "${PROMPT}" 100 16000 100 "${CURRENT}" 2>/dev/null) || exit 0
+		--slider "${PROMPT}" 100 "${TOTAL_RAM}" 100 "${CURRENT}" 2>/dev/null) || exit 0
 
 # Fallback: plain terminal input when no GUI dialog tool is available.
 elif [[ -t 0 ]]; then
