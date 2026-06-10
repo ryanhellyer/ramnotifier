@@ -2,8 +2,8 @@
 Type=Application
 Name=RAM Notifier
 Comment=Configure the RAM alert threshold
-Exec=__BINDIR__/ram-monitor-settings
-Icon=ram-monitor
+Exec=__BINDIR__/ramnotifier-settings
+Icon=ramnotifier
 Terminal=false
 StartupWMClass=ram-notifier-settings
 StartupNotify=true

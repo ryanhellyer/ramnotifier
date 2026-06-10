@@ -1,4 +1,4 @@
-module ram-monitor
+module ramnotifier
 
 go 1.26.3
 

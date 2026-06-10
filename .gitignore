@@ -2,6 +2,7 @@
 ram-monitor
 ram-monitor-linux-amd64
 ram-monitor-linux-arm64
+ramnotifier
 
 # OS
 .DS_Store

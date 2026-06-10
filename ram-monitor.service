@@ -1,5 +1,5 @@
 [Unit]
-Description=RAM monitor with desktop notifications
+Description=RAM notifier with desktop notifications
 
 [Service]
 ExecStart=ram-monitor

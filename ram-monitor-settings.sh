@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-CONFIG_FILE="${HOME}/.config/ram-monitor/threshold"
+CONFIG_FILE="${HOME}/.config/ramnotifier/threshold"
 mkdir -p "$(dirname "${CONFIG_FILE}")"
 
 TOTAL_RAM=$(awk '/MemTotal:/ {printf "%d", $2/1024}' /proc/meminfo)
@@ -41,7 +41,7 @@ fi
 
 if [[ -n "${NEW}" ]] && [[ "${NEW}" =~ ^[0-9]+$ ]] && [[ "${NEW}" -ge 100 ]]; then
 	echo "${NEW}" > "${CONFIG_FILE}"
-	systemctl --user reload-or-restart ram-monitor 2>/dev/null || true
+	systemctl --user reload-or-restart ramnotifier 2>/dev/null || true
 	echo "Threshold set to ${NEW} MB."
 else
 	echo "Invalid or cancelled input." >&2

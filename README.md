@@ -1,6 +1,6 @@
 # RAM Notifier
 
-A lightweight Linux desktop RAM monitor that sends tiered desktop notifications when available memory drops below configurable thresholds.
+A lightweight Linux desktop RAM notifier that sends tiered desktop notifications when available memory drops below configurable thresholds.
 
 Requires a systemd-based Linux desktop with a D-Bus notification daemon (Ubuntu, Fedora, Debian, Arch, openSUSE, Bluefin, etc.).
 
@@ -14,7 +14,7 @@ Downloads the binary to `~/.local/bin`, starts a background systemd user service
 
 ## Configure
 
-Launch "RAM Monitor Settings" from your system menu. Opens a slider dialog — no terminal needed. Changes take effect immediately.
+Launch "RAM Notifier" from your system menu. Opens a slider dialog — no terminal needed. Changes take effect immediately.
 
 ## How it works
 
@@ -32,7 +32,7 @@ Requires Go 1.26+.
 
 ```bash
 git clone https://github.com/ryanhellyer/ramnotifier.git
-cd ram-monitor
+cd ramnotifier
 make install
 ```
 
@@ -42,8 +42,8 @@ make install
 
 - Rewritten in Go. No external dependencies beyond a Linux desktop with D-Bus.
 - Runs as a background systemd user service — no terminal window needed.
-- Configurable top threshold stored at `~/.config/ram-monitor/threshold`.
-- Settings UI via desktop entry (system menu → "RAM Monitor Settings"), with fallbacks: zenity → kdialog → terminal.
+- Configurable top threshold stored at `~/.config/ramnotifier/threshold`.
+- Settings UI via desktop entry (system menu → "RAM Notifier"), with fallbacks: zenity → kdialog → terminal.
 - Five alert tiers auto-scale from the configured top threshold.
 - Alerts only fire when RAM gets worse; don't re-fire on recovery.
 - SIGHUP reload — changing the config file takes effect immediately without restart.

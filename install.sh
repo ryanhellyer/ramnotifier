@@ -10,17 +10,20 @@ BINDIR="${HOME}/.local/bin"
 APPDIR="${HOME}/.local/share/applications"
 ICONDIR="${HOME}/.local/share/icons/hicolor/48x48/apps"
 SERVICEDIR="${HOME}/.config/systemd/user"
-CONFIG_FILE="${HOME}/.config/ram-monitor/threshold"
-SERVICE_NAME="ram-monitor"
+CONFIG_FILE="${HOME}/.config/ramnotifier/threshold"
+SERVICE_NAME="ramnotifier"
+
+OLD_SERVICE_NAME="ram-monitor"
+OLD_CONFIG_DIR="${HOME}/.config/ram-monitor"
 
 err() { echo "ERROR: $*" >&2; exit 1; }
 
 if [[ "${1:-}" == "--uninstall" ]]; then
     systemctl --user disable --now "${SERVICE_NAME}" 2>/dev/null || true
-    rm -f "${BINDIR}/ram-monitor"
-    rm -f "${BINDIR}/ram-monitor-settings"
-    rm -f "${APPDIR}/ram-monitor-settings.desktop"
-    rm -f "${ICONDIR}/ram-monitor.png"
+    rm -f "${BINDIR}/ramnotifier"
+    rm -f "${BINDIR}/ramnotifier-settings"
+    rm -f "${APPDIR}/ramnotifier-settings.desktop"
+    rm -f "${ICONDIR}/ramnotifier.png"
     rm -f "${SERVICEDIR}/${SERVICE_NAME}.service"
     rm -f "${CONFIG_FILE}"
     systemctl --user daemon-reload
@@ -54,30 +57,47 @@ SETTINGS_URL="https://raw.githubusercontent.com/${OWNER}/${REPO}/${VERSION}/ram-
 DESKTOP_URL="https://raw.githubusercontent.com/${OWNER}/${REPO}/${VERSION}/ram-monitor-settings.desktop"
 ICON_URL="https://raw.githubusercontent.com/${OWNER}/${REPO}/${VERSION}/ram-monitor.png"
 
+# clean up old install
+if systemctl --user is-active "${OLD_SERVICE_NAME}" &>/dev/null; then
+    echo "  Removing previous ram-monitor service"
+    systemctl --user disable --now "${OLD_SERVICE_NAME}" 2>/dev/null || true
+fi
+rm -f "${SERVICEDIR}/${OLD_SERVICE_NAME}.service"
+
+# stop existing service before overwriting the binary
+systemctl --user stop "${SERVICE_NAME}" 2>/dev/null || true
+
 echo "Installing ${REPO} ${VERSION} (${ARCH})..."
 echo "  Downloading ${URL}"
 
 mkdir -p "${BINDIR}"
-curl -sSLf "${URL}" -o "${BINDIR}/ram-monitor" || err "Download failed"
-chmod +x "${BINDIR}/ram-monitor"
+rm -f "${BINDIR}/ramnotifier"
+curl -sSLf "${URL}" -o "${BINDIR}/ramnotifier" || err "Download failed (curl exit $?)"
+chmod +x "${BINDIR}/ramnotifier"
 
 # install settings script
 echo "  Downloading settings script"
-curl -sSLf "${SETTINGS_URL}" -o "${BINDIR}/ram-monitor-settings" || true
-chmod +x "${BINDIR}/ram-monitor-settings" 2>/dev/null || true
+curl -sSLf "${SETTINGS_URL}" -o "${BINDIR}/ramnotifier-settings" || true
+chmod +x "${BINDIR}/ramnotifier-settings" 2>/dev/null || true
 
 # install desktop entry
 echo "  Installing desktop entry"
 mkdir -p "${APPDIR}"
-curl -sSLf "${DESKTOP_URL}" -o /tmp/ram-monitor-settings.desktop.tmp 2>/dev/null && {
-    sed "s|__BINDIR__|${BINDIR}|g" /tmp/ram-monitor-settings.desktop.tmp > "${APPDIR}/ram-monitor-settings.desktop"
-    rm -f /tmp/ram-monitor-settings.desktop.tmp
+curl -sSLf "${DESKTOP_URL}" -o /tmp/ramnotifier-settings.desktop.tmp 2>/dev/null && {
+    sed "s|__BINDIR__|${BINDIR}|g" /tmp/ramnotifier-settings.desktop.tmp > "${APPDIR}/ramnotifier-settings.desktop"
+    rm -f /tmp/ramnotifier-settings.desktop.tmp
 } || true
 
 # install icon
 echo "  Installing icon"
 mkdir -p "${ICONDIR}"
-curl -sSLf "${ICON_URL}" -o "${ICONDIR}/ram-monitor.png" 2>/dev/null || true
+curl -sSLf "${ICON_URL}" -o "${ICONDIR}/ramnotifier.png" 2>/dev/null || true
+
+# migrate config file from old path
+if [[ -f "${OLD_CONFIG_DIR}/threshold" ]] && [[ ! -f "${CONFIG_FILE}" ]]; then
+    mkdir -p "$(dirname "${CONFIG_FILE}")"
+    cp "${OLD_CONFIG_DIR}/threshold" "${CONFIG_FILE}"
+fi
 
 # default config file
 mkdir -p "$(dirname "${CONFIG_FILE}")"
@@ -89,10 +109,10 @@ fi
 mkdir -p "${SERVICEDIR}"
 cat > "${SERVICEDIR}/${SERVICE_NAME}.service" << SYSTEMD
 [Unit]
-Description=RAM monitor with desktop notifications
+Description=RAM notifier with desktop notifications
 
 [Service]
-ExecStart=${BINDIR}/ram-monitor
+ExecStart=${BINDIR}/ramnotifier
 Restart=on-failure
 
 [Install]

@@ -28,10 +28,10 @@ var lastNotifID uint32 = 0
 
 func configDir() string {
 	if xdg := os.Getenv("XDG_CONFIG_HOME"); xdg != "" {
-		return filepath.Join(xdg, "ram-monitor")
+		return filepath.Join(xdg, "ramnotifier")
 	}
 	home, _ := os.UserHomeDir()
-	return filepath.Join(home, ".config", "ram-monitor")
+	return filepath.Join(home, ".config", "ramnotifier")
 }
 
 func configFilePath() string {
