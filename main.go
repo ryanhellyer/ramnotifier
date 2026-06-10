@@ -72,7 +72,7 @@ func sendNotification(title, body string) {
 	}
 	obj := conn.Object("org.freedesktop.Notifications", "/org/freedesktop/Notifications")
 	obj.Call("org.freedesktop.Notifications.Notify", 0,
-		"RAM-Monitor", uint32(0), "", title, body, []string{}, map[string]dbus.Variant{}, int32(-1),
+		"RAM-Notifier", uint32(0), "", title, body, []string{}, map[string]dbus.Variant{}, int32(-1),
 	)
 }
 

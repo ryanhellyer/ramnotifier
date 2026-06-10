@@ -9,8 +9,8 @@ if [[ -f "${CONFIG_FILE}" ]]; then
 	CURRENT=$(cat "${CONFIG_FILE}")
 fi
 
-TITLE="RAM Monitor"
-PROMPT="Alert threshold: available RAM below this value triggers a notification (MB)"
+TITLE="RAM Notifier"
+PROMPT="Available RAM below this value (in MB) will trigger a notification"
 
 # zenity is chosen as the primary GUI toolkit because it is pre-installed by
 # default on GNOME (Ubuntu default), XFCE, Cinnamon, MATE, and Budgie,
