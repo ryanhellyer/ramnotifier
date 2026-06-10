@@ -1,0 +1,9 @@
+[Unit]
+Description=RAM monitor with desktop notifications
+
+[Service]
+ExecStart=ram-monitor
+Restart=on-failure
+
+[Install]
+WantedBy=default.target

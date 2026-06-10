@@ -1,0 +1,16 @@
+# binaries
+ram-monitor
+ram-monitor-linux-amd64
+ram-monitor-linux-arm64
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+
+# Vim
+*.swp
+*.swo

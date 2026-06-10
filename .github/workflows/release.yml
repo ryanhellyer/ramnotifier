@@ -1,0 +1,32 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.26'
+
+      - name: Build
+        run: |
+          GOOS=linux GOARCH=amd64 go build -o ram-monitor-linux-amd64 .
+          GOOS=linux GOARCH=arm64 go build -o ram-monitor-linux-arm64 .
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            ram-monitor-linux-amd64
+            ram-monitor-linux-arm64
+          generate_release_notes: true
