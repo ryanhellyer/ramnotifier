@@ -1,6 +1,7 @@
 PREFIX ?= $(HOME)/.local
 BINDIR = $(PREFIX)/bin
 APPDIR = $(HOME)/.local/share/applications
+ICONDIR = $(HOME)/.local/share/icons/hicolor/48x48/apps
 SERVICEDIR = $(HOME)/.config/systemd/user
 CONFIGDIR = $(HOME)/.config/ram-monitor
 
@@ -21,6 +22,8 @@ install: build
 	chmod +x $(BINDIR)/ram-monitor-settings
 	mkdir -p $(APPDIR)
 	sed 's|__BINDIR__|$(BINDIR)|g' ram-monitor-settings.desktop > $(APPDIR)/ram-monitor-settings.desktop
+	mkdir -p $(ICONDIR)
+	cp ram-monitor.png $(ICONDIR)/ram-monitor.png
 	mkdir -p $(CONFIGDIR)
 	[ -f $(CONFIGDIR)/threshold ] || echo 1500 > $(CONFIGDIR)/threshold
 	mkdir -p $(SERVICEDIR)
@@ -33,6 +36,7 @@ uninstall:
 	rm -f $(BINDIR)/ram-monitor
 	rm -f $(BINDIR)/ram-monitor-settings
 	rm -f $(APPDIR)/ram-monitor-settings.desktop
+	rm -f $(ICONDIR)/ram-monitor.png
 	rm -f $(SERVICEDIR)/ram-monitor.service
 	rm -f $(CONFIGDIR)/threshold
 	systemctl --user daemon-reload

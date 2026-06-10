@@ -31,4 +31,5 @@ jobs:
             ram-monitor-linux-arm64
             ram-monitor-settings.sh
             ram-monitor-settings.desktop
+            ram-monitor.png
           generate_release_notes: true

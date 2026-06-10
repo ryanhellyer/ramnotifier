@@ -3,6 +3,6 @@ Type=Application
 Name=RAM Monitor Settings
 Comment=Configure the RAM alert threshold
 Exec=__BINDIR__/ram-monitor-settings
-Icon=utilities-system-monitor
+Icon=ram-monitor
 Terminal=false
 Categories=Settings;System;

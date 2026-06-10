@@ -8,6 +8,7 @@ REPO="${GITHUB_REPO:-ram-monitor}"
 
 BINDIR="${HOME}/.local/bin"
 APPDIR="${HOME}/.local/share/applications"
+ICONDIR="${HOME}/.local/share/icons/hicolor/48x48/apps"
 SERVICEDIR="${HOME}/.config/systemd/user"
 CONFIG_FILE="${HOME}/.config/ram-monitor/threshold"
 SERVICE_NAME="ram-monitor"
@@ -19,6 +20,7 @@ if [[ "${1:-}" == "--uninstall" ]]; then
     rm -f "${BINDIR}/ram-monitor"
     rm -f "${BINDIR}/ram-monitor-settings"
     rm -f "${APPDIR}/ram-monitor-settings.desktop"
+    rm -f "${ICONDIR}/ram-monitor.png"
     rm -f "${SERVICEDIR}/${SERVICE_NAME}.service"
     rm -f "${CONFIG_FILE}"
     systemctl --user daemon-reload
@@ -50,6 +52,7 @@ BINARY="ram-monitor-linux-${ARCH}"
 URL="https://github.com/${OWNER}/${REPO}/releases/download/${VERSION}/${BINARY}"
 SETTINGS_URL="https://raw.githubusercontent.com/${OWNER}/${REPO}/${VERSION}/ram-monitor-settings.sh"
 DESKTOP_URL="https://raw.githubusercontent.com/${OWNER}/${REPO}/${VERSION}/ram-monitor-settings.desktop"
+ICON_URL="https://raw.githubusercontent.com/${OWNER}/${REPO}/${VERSION}/ram-monitor.png"
 
 echo "Installing ${REPO} ${VERSION} (${ARCH})..."
 echo "  Downloading ${URL}"
@@ -70,6 +73,11 @@ curl -sSLf "${DESKTOP_URL}" -o /tmp/ram-monitor-settings.desktop.tmp 2>/dev/null
     sed "s|__BINDIR__|${BINDIR}|g" /tmp/ram-monitor-settings.desktop.tmp > "${APPDIR}/ram-monitor-settings.desktop"
     rm -f /tmp/ram-monitor-settings.desktop.tmp
 } || true
+
+# install icon
+echo "  Installing icon"
+mkdir -p "${ICONDIR}"
+curl -sSLf "${ICON_URL}" -o "${ICONDIR}/ram-monitor.png" 2>/dev/null || true
 
 # default config file
 mkdir -p "$(dirname "${CONFIG_FILE}")"

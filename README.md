@@ -23,6 +23,7 @@ curl -sSL https://raw.githubusercontent.com/you/ram-monitor/main/install.sh | ba
 | `~/.local/bin/ram-monitor` | Go binary (background service) |
 | `~/.local/bin/ram-monitor-settings` | Settings UI script |
 | `~/.local/share/applications/ram-monitor-settings.desktop` | Desktop entry (appears in system menu as "RAM Monitor Settings") |
+| `~/.local/share/icons/hicolor/48x48/apps/ram-monitor.png` | App icon |
 | `~/.config/systemd/user/ram-monitor.service` | systemd user unit (auto-starts on login) |
 | `~/.config/ram-monitor/threshold` | Config file: top alert threshold in MB (default 1500) |
 
@@ -75,6 +76,7 @@ Or manually:
 systemctl --user disable --now ram-monitor
 rm ~/.local/bin/ram-monitor ~/.local/bin/ram-monitor-settings
 rm ~/.local/share/applications/ram-monitor-settings.desktop
+rm ~/.local/share/icons/hicolor/48x48/apps/ram-monitor.png
 rm ~/.config/systemd/user/ram-monitor.service
 rm ~/.config/ram-monitor/threshold
 systemctl --user daemon-reload
