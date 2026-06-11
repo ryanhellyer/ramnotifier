@@ -10,7 +10,12 @@ Requires a systemd-based Linux desktop with a D-Bus notification daemon (Ubuntu,
 curl -sSL https://raw.githubusercontent.com/ryanhellyer/ramnotifier/master/install.sh | bash
 ```
 
-Downloads the binary to `~/.local/bin`, starts a background systemd user service, and auto-starts on login. No terminal window needed.
+Or build from source (requires Go 1.26+):
+```bash
+git clone https://github.com/ryanhellyer/ramnotifier.git
+cd ramnotifier
+make install
+```
 
 ## Configure
 
@@ -18,22 +23,12 @@ Launch "RAM Notifier" from your system menu. Opens a slider dialog — no termin
 
 ## How it works
 
-Polls `/proc/meminfo` every 5 seconds. Fires a desktop notification only when available RAM drops into a lower of 5 equal tiers derived from your threshold. Resets when RAM recovers above the threshold.
+Polls `/proc/meminfo` every 5 seconds via a systemd user service. Fires a desktop notification only when available RAM drops into a lower of 5 equal tiers derived from your threshold. Resets when RAM recovers above the threshold.
 
 ## Uninstall
 
 ```bash
 curl -sSL https://raw.githubusercontent.com/ryanhellyer/ramnotifier/master/install.sh | bash -s -- --uninstall
-```
-
-## Build from source
-
-Requires Go 1.26+.
-
-```bash
-git clone https://github.com/ryanhellyer/ramnotifier.git
-cd ramnotifier
-make install
 ```
 
 ## Changelog
