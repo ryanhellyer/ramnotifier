@@ -5,7 +5,6 @@ A lightweight Linux desktop RAM notifier that sends tiered desktop notifications
 Requires a systemd-based Linux desktop with a D-Bus notification daemon (Ubuntu, Fedora, Debian, Arch, openSUSE, Bluefin, etc.).
 
 ![RAM Notifier notification](screenshot-notification.jpg)
-![RAM Notifier settings](screenshot-settings.jpg)
 
 ## Install
 
@@ -23,6 +22,8 @@ make install
 ## Configure
 
 Launch "RAM Notifier" from your system menu. Opens a slider dialog — no terminal needed. Changes take effect immediately.
+
+![RAM Notifier settings](screenshot-settings.jpg)
 
 ## How it works
 
